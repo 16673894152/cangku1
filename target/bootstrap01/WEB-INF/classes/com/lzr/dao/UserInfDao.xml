@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzr.dao.UserInfDao">
+    <select id="LoginUserInf" parameterType="UserInf" resultType="UserInf">
+        select * from user_inf
+        <where>
+            <if test="loginname!=null">and loginname=#{loginname}</if>
+            <if test="password!=null">and password=#{password}</if>
+        </where>
+    </select>
+    <select id="queryUserInfByUser1" parameterType="UserInf" resultType="UserInf">
+        select * from user_inf
+        <where>
+            <if test="loginname!=null">and loginname like concat('%',#{loginname},'%')</if>
+            <if test="username!=null">and username like concat('%',#{username},'%')</if>
+            <if test="1!=2">and status=1</if>
+        </where>
+    </select>
+    <select id="queryUserInfByUser2" parameterType="UserInf" resultType="int">
+        select count(*) from user_inf
+        <where>
+            <if test="loginname!=null">and loginname like concat('%',#{loginname},'%')</if>
+            <if test="username!=null">and username like concat('%',#{username},'%')</if>
+            <if test="1!=2">and status=1</if>
+        </where>
+    </select>
+    <!--    //添加用户-->
+    <insert id="addUserInf" parameterType="UserInf">
+        insert into user_inf
+        values (null, #{loginname}, #{password}, 1, now(),'无');
+    </insert>
+    <!--    //删除用户-->
+
+    <update id="delUserInf" parameterType="int">
+        update user_inf
+        set status=0
+        where id = #{id}
+    </update>
+
+    <update id="updateUserInf" parameterType="UserInf">
+        update user_inf
+        set password=#{password},
+            username=#{username}
+        where id = #{id}
+    </update>
+
+    <select id="queryByid" parameterType="int" resultType="UserInf">
+        select *
+        from user_inf
+        where id = #{id}
+    </select>
+</mapper>

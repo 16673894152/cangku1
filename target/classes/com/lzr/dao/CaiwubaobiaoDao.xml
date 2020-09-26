@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzr.dao.CaiwubaobiaoDao">
+    <resultMap id="queryMap" type="Caiwubaobiao">
+        <result column="year(cwtime)" property="years"></result>
+        <result column="month(cwtime)" property="months"></result>
+        <result column="sum(cwmoney)" property="sums"></result>
+    </resultMap>
+    <select id="Query"  resultMap="queryMap">
+        <if test="time==2">
+        <!-- 查年份报表-->
+            select year(cwtime),sum(cwmoney) from caiwubaobiao  where cwstate=#{cwstate} group by year(cwtime) order by year(cwtime) desc;
+        </if>
+        <if test="time==1">
+            <!-- 查一年中的月份报表-->
+            select month(cwtime),sum(cwmoney) from caiwubaobiao where cwstate=#{cwstate}  <if test="year!=null">and year(cwtime) like concat('%',#{year},'%')</if> group by month(cwtime) order by month(cwtime) asc;
+        </if>
+    </select>
+</mapper>
